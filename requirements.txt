@@ -1,0 +1,5 @@
+authlib==1.0.1
+uvicorn==0.17.6
+httpx==0.22.0
+itsdangerous==2.1.2
+fastapi==0.75.1
