@@ -1,5 +1,7 @@
-#
-FROM python:3.9
+# [Choice] Python version: 3, 3.8, 3.7, 3.6
+ARG VARIANT=3.8
+
+FROM python:${VARIANT}
 
 #
 WORKDIR /code
