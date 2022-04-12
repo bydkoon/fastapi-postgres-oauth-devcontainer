@@ -79,3 +79,7 @@ async def home(request: Request):
     return HTMLResponse('<a href="/login">login</a>')
 
 # app.include_router(auth, prefix="/auth")
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0"
+                , port=5000, reload=True
+                )

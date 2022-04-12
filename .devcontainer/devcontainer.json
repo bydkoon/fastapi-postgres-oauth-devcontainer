@@ -2,28 +2,25 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.177.0/containers/python-3-postgres
 // Update the VARIANT arg in docker-compose.yml to pick a Python version: 3, 3.8, 3.7, 3.6 
 {
-	"name": "Python 3 & PostgreSQL",
+	"name": "Python3-fastapi-postgre",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspace",
-
 	// Set *default* container specific settings.json values on container create.
-	"settings": { 
-		"terminal.integrated.profiles.linux": {
-			"bash": {
-				"path": "/bin/bash"
+	"settings": {
+		"terminal.integrated.shell.linux": "/bin/bash",
+		"sqltools.connections": [
+			{
+				"name": "Container database",
+				"driver": "PostgreSQL",
+				"previewLimit": 50,
+				"server": "localhost",
+				"port": 5432,
+				"database": "postgres",
+				"username": "postgres",
+				"password": "postgres"
 			}
-		},
-		// "sqltools.connections": [{
-		// 	"name": "Container database",
-		// 	"driver": "PostgreSQL",
-		// 	"previewLimit": 50,
-		// 	"server": "localhost",
-		// 	"port": 5432,
-		// 	"database": "postgres",
-		// 	"username": "postgres",
-		// 	"password": "postgres"
-		// }],
+		],
 		"python.pythonPath": "/usr/local/bin/python",
 		"python.languageServer": "Pylance",
 		"python.linting.enabled": true,
@@ -39,21 +36,17 @@
 		"python.linting.pylintPath": "/usr/local/py-utils/bin/pylint",
 		"python.testing.pytestPath": "/usr/local/py-utils/bin/pytest"
 	},
-
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"ms-python.python",
 		"ms-python.vscode-pylance",
-		// "mtxr.sqltools",
-		// "mtxr.sqltools-driver-pg"
+		"mtxr.sqltools",
+		"mtxr.sqltools-driver-pg"
 	],
-
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [5000, 5432],
-
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "pip3 install -r requirements.txt",
-
+	// "postCreateCommand": "pip install --user -r requirements.txt",
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode"
 }
