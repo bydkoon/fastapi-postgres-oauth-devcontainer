@@ -1,26 +1,42 @@
-version: '3'
+version: '3.9'
 
 services:
   app:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
+      command: uvicorn app.main:app --host 0.0.0.0
+      port:
+       - 8000:8000
       args:
-        # [Choice] Python version: 3, 3.8, 3.7, 3.6
-        VARIANT: 3.8
+        VARIANT: 3-bullseye
         # [Choice] Install Node.js
-        INSTALL_NODE: 'true'
+        # INSTALL_NODE: 'false'
         NODE_VERSION: 'lts/*'
         # On Linux, you may need to update USER_UID and USER_GID below if not your local UID is not 1000.
-        USER_UID: 1000
-        USER_GID: 1000
-    ports:
-      - 8000:8000
+        # USER_UID: 1000
+        # USER_GID: 1000
+
     volumes:
-      - ..:/workspace
-    environment:
-      - DATABASE_URI=postgresql://postgres:postgres@db/postgres
+      - ..:/workspace:cached
+    
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+    
+    # environment:
+      # - DATABASE_URI=postgresql://postgres:postgres@db/postgres
+
+    
+
+
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
     network_mode: service:db
+
+    # Uncomment the next line to use a non-root user for all processes.
+    # user: vscode
+
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
 
   db:
     image: postgres:latest

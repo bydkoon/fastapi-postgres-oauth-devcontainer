@@ -9,7 +9,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from starlette.responses import HTMLResponse, JSONResponse, RedirectResponse
 from authlib.integrations.starlette_client import OAuth
 
-from router import auth
+from routers import auth
 
 app = FastAPI()
 app.mount('/auth', auth)
