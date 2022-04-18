@@ -3,12 +3,13 @@ from typing import Optional
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.openapi.utils import get_openapi
+from httpx import main
 from starlette.config import Config
 from starlette.requests import Request
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.responses import HTMLResponse, JSONResponse, RedirectResponse
 from authlib.integrations.starlette_client import OAuth
-
+import uvicorn
 from routers import auth
 
 app = FastAPI()
@@ -43,31 +44,18 @@ async def login(request: Request):
 
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
-
-
 @app.get('/logout', tags=['authentication'])  # Tag it as "authentication" for our docs
 async def logout(request: Request):
     # Remove the user
+
     request.session.pop('user', None)
 
     return RedirectResponse(url='/')
 
-
-@app.route('/openapi.json')
-async def get_open_api_endpoint(request: Request, user: Optional[dict] = Depends(get_user)):  # This dependency protects our endpoint!
-    response = JSONResponse(get_openapi(title='FastAPI', version=1, routes=app.routes))
-    return response
-
-
-@app.get('/docs', tags=['documentation'])  # Tag it as "documentation" for our docs
-async def get_documentation(request: Request, user: Optional[dict] = Depends(get_user)):  # This dependency protects our endpoint!
-    response = get_swagger_ui_html(openapi_url='/openapi.json', title='Documentation')
-    return response
-
-
 @app.get('/')
 async def home(request: Request):
     user = request.session.get('user')
+
     if user is not None:
         email = user['email']
         html = (
