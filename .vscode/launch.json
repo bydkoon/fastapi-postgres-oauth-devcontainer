@@ -4,15 +4,28 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+    
       {
         "name": "Python: FastAPI",
         "type": "python",
         "request": "launch",
         "module": "uvicorn",
+        "cwd": "${workspaceFolder}/<folder to your main.py>",
+        "env": {
+          "db_username": "postgres",
+          "db_password": "postgres",
+          "host_server": "localhost",
+          "database_name": "fastapi",
+          // "ssl_mode": "prefer",
+          "db_server_port": "5432"
+      },
         "args": [
-          "main:app"
+          "main:app",
+          "--reload",
+          "--port",
+          "8000"
         ],
-        "jinja": true
+        "jinja": true,
       }
     ]
   }

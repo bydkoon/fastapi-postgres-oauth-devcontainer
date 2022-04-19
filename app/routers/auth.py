@@ -5,8 +5,7 @@ from fastapi.openapi.utils import get_openapi
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, JSONResponse, RedirectResponse
 
-from main import app, oauth
-
+from app.main import app, oauth
 
 @app.route('/auth')
 async def auth(request: Request):
