@@ -10,7 +10,7 @@
         "type": "python",
         "request": "launch",
         "module": "uvicorn",
-        "cwd": "${workspaceFolder}/<folder to your main.py>",
+        // "cwd": "${workspaceFolder}/<folder to your main.py>",
         "env": {
           "db_username": "postgres",
           "db_password": "postgres",
