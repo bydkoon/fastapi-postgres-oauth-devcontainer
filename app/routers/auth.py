@@ -1,16 +1,17 @@
-from typing import Optional
-from fastapi import HTTPException
-from starlette.requests import Request
-from starlette.responses import RedirectResponse
+import json
 from fastapi import APIRouter
+from fastapi import FastAPI
 from starlette.config import Config
-from authlib.integrations.starlette_client import OAuth
+from starlette.requests import Request
+from starlette.responses import HTMLResponse, RedirectResponse
+from authlib.integrations.starlette_client import OAuth, OAuthError
 
-config = Config('.env')
-oauth = OAuth(config)
 router = APIRouter()
 
 # Initialize our OAuth instance from the client ID and client secret specified in our .env file
+config = Config('.env')
+oauth = OAuth(config)
+
 CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
 oauth.register(
     name='google',
@@ -20,28 +21,6 @@ oauth.register(
     }
 )
 
-@router.get('/auth')
-async def auth(request: Request):
-    # Perform Google OAuth
-    token = await oauth.google.authorize_access_token(request)
-    user = await oauth.google.parse_id_token(request, token)
-
-    # Save the user
-    request.session['user'] = dict(user)
-
-    return RedirectResponse(url='/')
-
-
-
-# Try to get the logged in user
-async def get_user(request: Request) -> Optional[dict]:
-    user = request.session.get('user')
-    if user is not None:
-        return user
-    else:
-        raise HTTPException(status_code=403, detail='Could not validate credentials.')
-
-    return None
 
 @router.get('/login', tags=['authentication'])  # Tag it as "authentication" for our docs
 async def login(request: Request):
@@ -51,10 +30,21 @@ async def login(request: Request):
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 
+@router.route('/auth')
+async def auth(request: Request):
+    try:
+        token = await oauth.google.authorize_access_token(request)
+    except OAuthError as error:
+        return HTMLResponse(f'<h1>{error.error}</h1>')
+    user = token.get('userinfo')
+    if user:
+        request.session['user'] = dict(user)
+    return RedirectResponse(url='/')
+
+
 @router.get('/logout', tags=['authentication'])  # Tag it as "authentication" for our docs
 async def logout(request: Request):
     # Remove the user
-
     request.session.pop('user', None)
 
     return RedirectResponse(url='/')
