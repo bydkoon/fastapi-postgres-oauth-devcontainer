@@ -27,7 +27,7 @@ into the client redirect urls
 ## version
 - Python3.9+
 
-## docker devcontainer File sharing add for wcl
+## docker devcontainer File sharing add
 
  - docker settings → Resource → File sharing  → project directory
 
