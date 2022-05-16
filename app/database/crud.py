@@ -1,7 +1,10 @@
 from database.models import Users
+from fastapi import HTTPException
+from database import Session
+from database.schemas import User, UserBase
 
 
-def create_user(session: Session, user: schemas.UserBase) -> Users:
+def create_user(session: Session, user: UserBase) -> Users:
     db_user = Users(
         nickname=user.nickname,
         gender=user.gender,
@@ -15,9 +18,9 @@ def create_user(session: Session, user: schemas.UserBase) -> Users:
 
 
 def update_user_info(
-    session: Session, user_id: int, info_update: schemas.UserBase
+    session: Session, user_id: int, info_update: UserBase
 ) -> Users:
-    user_info = session.query(models.Users).get(user_id)
+    user_info = session.query(Users).get(user_id)
 
     if user_info is None:
         raise HTTPException(status_code=404, detail="ID에 해당하는 User가 없습니다.")
