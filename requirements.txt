@@ -8,3 +8,5 @@ sqlalchemy
 python-dotenv
 alembic
 requests
+mock
+psycopg2
