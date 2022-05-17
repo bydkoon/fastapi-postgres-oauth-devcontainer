@@ -1,7 +1,8 @@
-from database.models import Users
+from typing import Any
 from fastapi import HTTPException
-from database import Session
-from database.schemas import User, UserBase
+from .models import Users
+from .database import Session
+from .schemas import User, UserBase
 
 
 def create_user(session: Session, user: UserBase) -> Users:
@@ -17,9 +18,10 @@ def create_user(session: Session, user: UserBase) -> Users:
     return db_user
 
 
-def update_user_info(
-    session: Session, user_id: int, info_update: UserBase
-) -> Users:
+def update_user_info(session: Session, user_id: int, info_update: UserBase) -> Any:
+    """
+    userInfo is None return error
+    """
     user_info = session.query(Users).get(user_id)
 
     if user_info is None:
