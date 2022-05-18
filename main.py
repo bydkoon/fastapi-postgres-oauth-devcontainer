@@ -8,7 +8,7 @@ from starlette.responses import HTMLResponse
 
 from app.internal import admin
 from app.dependencies import get_query_token, get_token_header
-from app.routers import users
+from app.routers import users, auth
 import app.sql.database as db
 
 app = FastAPI(docs_url="/docs", redoc_url="/redoc")
@@ -33,6 +33,7 @@ async def shutdown():
     db.SessionLocal().close()
     
 app.include_router(users.router)
+app.include_router(auth.router)
 
 origins = [
     "http://localhost",
