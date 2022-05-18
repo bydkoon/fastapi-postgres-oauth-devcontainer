@@ -1,9 +1,9 @@
-from pydantic import BaseSettings, Field, validator
+from pydantic import BaseSettings, Field
 
 
 class Settings(BaseSettings):
     env: str = Field("prod", env="ENV")
-    app_url: str = Field("http://localhost:8080", env="APP_URL")
+    app_url: str = Field("http://localhost:8000", env="APP_URL")
     db_uri: str = Field(
         "postgresql://postgres:postgres@localhost:5432/postgres", env="DB_URI"
     )
